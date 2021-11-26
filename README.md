@@ -1,6 +1,6 @@
 # @logspot/node
 
-Logspot SDK for browser applications built with React, Next.js, Angular, etc.
+Logspot Node SDK for Node.js application.
 
 ## Installation
 
