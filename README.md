@@ -26,6 +26,8 @@ Logspot.init({ secretKey: 'YOUR_SECRET_KEY' });
 ```js
 Logspot.track({ 
     event: 'UserSubscribed', 
+    notify: true,
+    message: 'john@doe.com has subscribed',
     userId: 'john@doe.com', 
     metadata: { additionalData: '123' } 
 });
