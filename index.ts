@@ -8,6 +8,8 @@ const init = (config: { secretKey: string }) => {
 
 const track = async (data: {
   event: string;
+  message?: string;
+  notify?: boolean;
   userId?: string;
   metadata?: Record<string, any>;
 }) => {
@@ -33,6 +35,8 @@ const track = async (data: {
       mode: "cors",
       body: JSON.stringify({
         name: data.event,
+        message: data.message,
+        notify: data.notify,
         ...(data.userId && { user_id: data.userId }),
         ...(data.metadata && { metadata: data.metadata }),
       }),
