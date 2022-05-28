@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import fetch from "node-fetch";
 
 const API_URL = "https://api.logspot.io";
 
@@ -51,7 +51,7 @@ const track = async (data: {
 
     console.debug("Logspot - event tracked");
   } catch (err) {
-    console.error("Logspot - could not track event");
+    console.error("Logspot - could not track event", err);
   }
 };
 
