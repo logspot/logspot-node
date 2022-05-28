@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 const API_URL = "https://api.logspot.io";
 
 let sdkConfig: { secretKey: string };
@@ -32,7 +34,6 @@ const track = async (data: {
         "Content-Type": "application/json",
         "x-logspot-sk": sdkConfig.secretKey,
       },
-      mode: "cors",
       body: JSON.stringify({
         name: data.event,
         message: data.message,
