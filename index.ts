@@ -10,6 +10,7 @@ const init = (config: { secretKey: string }) => {
 
 const track = async (data: {
   event: string;
+  channel?: string;
   message?: string;
   notify?: boolean;
   userId?: string;
@@ -36,6 +37,7 @@ const track = async (data: {
       },
       body: JSON.stringify({
         name: data.event,
+        channel: data.channel,
         message: data.message,
         notify: data.notify,
         ...(data.userId && { user_id: data.userId }),
