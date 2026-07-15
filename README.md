@@ -32,3 +32,18 @@ Logspot.track({
     metadata: { additionalData: '123' } 
 });
 ```
+
+### Revenue
+
+Record a payment from your server. `amount` is in **major units** (e.g. dollars).
+Pass `transactionId` (your payment/charge id) so re-sending the same payment is
+deduped, and `userId` (or any extra props, which become metadata) to attribute it.
+
+```js
+Logspot.revenue(29.99, {
+    currency: 'USD',
+    transactionId: 'ch_123',
+    userId: 'john@doe.com',
+    plan: 'pro',
+});
+```
