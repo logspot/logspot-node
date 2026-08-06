@@ -2,6 +2,8 @@
 
 Logspot Node SDK for Node.js application.
 
+Requires Node.js 18 or newer (uses the built-in `fetch`).
+
 ## Installation
 
 ```npm install @logspot/node```

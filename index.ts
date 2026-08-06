@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 const API_URL = "https://api.logspot.io";
 
 /** Default reserved event name marking an event as revenue (server-default). */

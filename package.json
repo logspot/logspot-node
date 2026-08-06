@@ -1,6 +1,6 @@
 {
   "name": "@logspot/node",
-  "version": "2.2.0",
+  "version": "3.0.0",
   "description": "Logspot Node SDK",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,13 +13,12 @@
   },
   "author": "Logspot",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "devDependencies": {
     "@types/node": "^22",
-    "@types/node-fetch": "^2.6.13",
     "typescript": "^7.0.2"
-  },
-  "dependencies": {
-    "node-fetch": "^2.6.7"
   },
   "files": [
     "dist/index.js",
