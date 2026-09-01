@@ -207,4 +207,11 @@ const group = async (
   }
 };
 
+// Named exports so `module: NodeNext`/`node16` backend consumers resolve the
+// members cleanly (`import * as Logspot` or `import { track } from ...`). The
+// default export is kept for bundler/default-import users (e.g. the browser SDK
+// pattern). This package is CJS with no `exports` map, so without the named
+// bindings a NodeNext default import binds to the module object and members
+// fail to resolve (TS2339) — see @logspot/node consumers in concord-platform.
+export { init, track, revenue, group };
 export default { init, track, revenue, group };
