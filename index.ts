@@ -61,6 +61,12 @@ const track = async (data: {
     return;
   }
 
+  if (data.value != null && data.value !== 0 && !data.currency) {
+    console.warn(
+      "Logspot - payment sent without a currency. Revenue reports leave it out unless the project counts payments without a currency. Pass currency, e.g. { currency: 'USD' }."
+    );
+  }
+
   try {
     const res = await fetch(`${API_URL}/v1/track`, {
       method: "POST",
