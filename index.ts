@@ -3,10 +3,26 @@ const API_URL = "https://api.logspot.io";
 /** Default reserved event name marking an event as revenue (server-default). */
 const DEFAULT_REVENUE_EVENT_NAME = "Payment";
 
-let sdkConfig: { secretKey: string };
+let sdkConfig: { apiToken?: string; secretKey?: string } | undefined;
+let warnedLegacySecret = false;
 
-const init = (config: { secretKey: string }) => {
+// Prefer `apiToken` (an API token from Integrations > AI & API Access, sent as a Bearer token).
+// `secretKey` is the legacy project secret; it still works and warns once.
+const init = (config: { apiToken?: string; secretKey?: string }) => {
   sdkConfig = config;
+  if (config.secretKey && !config.apiToken && !warnedLegacySecret) {
+    warnedLegacySecret = true;
+    console.warn(
+      "Logspot - `secretKey` is the legacy project secret. Create an API token under Integrations > AI & API Access and use init({ apiToken })."
+    );
+  }
+};
+
+const authHeaders = (): Record<string, string> | null => {
+  if (sdkConfig?.apiToken)
+    return { Authorization: `Bearer ${sdkConfig.apiToken}` };
+  if (sdkConfig?.secretKey) return { "x-logspot-sk": sdkConfig.secretKey };
+  return null;
 };
 
 const track = async (data: {
@@ -32,9 +48,10 @@ const track = async (data: {
   externalId?: string;
   metadata?: Record<string, any>;
 }) => {
-  if (!sdkConfig || !sdkConfig.secretKey) {
+  const auth = authHeaders();
+  if (!auth) {
     console.error(
-      "Logspot - SDK not configured. You need to call: Logspot.init({secretKey: 'YOUR_SECRET_KEY'})"
+      "Logspot - SDK not configured. Call Logspot.init({ apiToken: 'YOUR_API_TOKEN' })"
     );
     return;
   }
@@ -45,11 +62,11 @@ const track = async (data: {
   }
 
   try {
-    const res = await fetch(`${API_URL}/track`, {
+    const res = await fetch(`${API_URL}/v1/track`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-logspot-sk": sdkConfig.secretKey,
+        ...auth,
       },
       body: JSON.stringify({
         name: data.event,
@@ -67,7 +84,7 @@ const track = async (data: {
       }),
     });
 
-    if (res.status !== 200) {
+    if (!res.ok) {
       const body = await res.json();
       console.debug("Logspot - ", body);
       return;
@@ -163,9 +180,10 @@ const group = async (
     traits?: Record<string, any>;
   } = {}
 ) => {
-  if (!sdkConfig || !sdkConfig.secretKey) {
+  const auth = authHeaders();
+  if (!auth) {
     console.error(
-      "Logspot - SDK not configured. You need to call: Logspot.init({secretKey: 'YOUR_SECRET_KEY'})"
+      "Logspot - SDK not configured. Call Logspot.init({ apiToken: 'YOUR_API_TOKEN' })"
     );
     return;
   }
@@ -180,11 +198,11 @@ const group = async (
   }
 
   try {
-    const res = await fetch(`${API_URL}/group`, {
+    const res = await fetch(`${API_URL}/v1/group`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-logspot-sk": sdkConfig.secretKey,
+        ...auth,
       },
       body: JSON.stringify({
         group_id: groupId,
@@ -195,7 +213,7 @@ const group = async (
       }),
     });
 
-    if (res.status !== 200) {
+    if (!res.ok) {
       const body = await res.json();
       console.debug("Logspot - ", body);
       return;
